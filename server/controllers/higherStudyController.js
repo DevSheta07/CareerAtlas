@@ -13,11 +13,6 @@ const getHigherStudies = async (req, res) => {
     // Build filter object
     const filter = {};
 
-    // Filter by university (regex search)
-    if (req.query.university) {
-      filter.university = new RegExp(req.query.university, 'i');
-    }
-
     // Filter by country
     if (req.query.country) {
       filter.country = req.query.country;
@@ -26,6 +21,26 @@ const getHigherStudies = async (req, res) => {
     // Filter by program
     if (req.query.program) {
       filter.program = req.query.program;
+    }
+
+    // Handle search query (university name, student name, or enrollment number)
+    if (req.query.search) {
+      const searchRegex = new RegExp(req.query.search, 'i');
+
+      // Find matching student IDs
+      const matchingStudents = await Student.find({
+        $or: [
+          { name: searchRegex },
+          { enrollmentNo: searchRegex },
+        ],
+      }).select('_id');
+      const studentIds = matchingStudents.map((s) => s._id);
+
+      // Search matches EITHER university name OR matched student IDs
+      filter.$or = [
+        { university: searchRegex },
+        { studentId: { $in: studentIds } },
+      ];
     }
 
     const totalRecords = await HigherStudy.countDocuments(filter);

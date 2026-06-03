@@ -47,7 +47,7 @@ export default function PlacementsPage() {
     setLoading(true);
     try {
       const params = { page, limit: 10 };
-      if (filters.search) params.company = filters.search;
+      if (filters.search) params.search = filters.search;
       if (filters.branch) params.branch = filters.branch;
       if (filters.batch) params.batch = filters.batch;
 
@@ -250,7 +250,7 @@ export default function PlacementsPage() {
             <HiMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-apple-ink-48" />
             <input
               type="text"
-              placeholder="Search by company name..."
+              placeholder="Search by student name or company..."
               value={filters.search}
               onChange={(e) => handleFilterChange('search', e.target.value)}
               className="input-field w-full pl-10"

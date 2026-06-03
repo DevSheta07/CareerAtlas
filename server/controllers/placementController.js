@@ -13,9 +13,43 @@ const getPlacements = async (req, res) => {
     // Build filter object
     const filter = {};
 
-    // Filter by company (regex search)
-    if (req.query.company) {
-      filter.company = new RegExp(req.query.company, 'i');
+    // Build student-specific sub-filters (branch, batch)
+    const studentFilter = {};
+    let filterByStudent = false;
+
+    if (req.query.branch) {
+      studentFilter.branch = req.query.branch;
+      filterByStudent = true;
+    }
+    if (req.query.batch) {
+      studentFilter.batch = req.query.batch;
+      filterByStudent = true;
+    }
+
+    // Handle search query
+    if (req.query.search) {
+      const searchRegex = new RegExp(req.query.search, 'i');
+
+      // Find matching student IDs that also satisfy branch/batch (if specified)
+      const studentsMatchingSearch = await Student.find({
+        ...studentFilter,
+        $or: [
+          { name: searchRegex },
+          { enrollmentNo: searchRegex },
+        ],
+      }).select('_id');
+      const matchedStudentIds = studentsMatchingSearch.map((s) => s._id);
+
+      // Search matches EITHER company name OR matched student IDs
+      filter.$or = [
+        { company: searchRegex },
+        { studentId: { $in: matchedStudentIds } },
+      ];
+    } else if (filterByStudent) {
+      // No search query, but filtering by branch/batch
+      const matchingStudents = await Student.find(studentFilter).select('_id');
+      const studentIds = matchingStudents.map((s) => s._id);
+      filter.studentId = { $in: studentIds };
     }
 
     // Filter by placement type
@@ -32,21 +66,6 @@ const getPlacements = async (req, res) => {
       if (req.query.maxPackage) {
         filter.package.$lte = parseFloat(req.query.maxPackage);
       }
-    }
-
-    // Filter by branch or batch (cross-collection filter via student IDs)
-    if (req.query.branch || req.query.batch) {
-      const studentFilter = {};
-      if (req.query.branch) {
-        studentFilter.branch = req.query.branch;
-      }
-      if (req.query.batch) {
-        studentFilter.batch = req.query.batch;
-      }
-
-      const matchingStudents = await Student.find(studentFilter).select('_id');
-      const studentIds = matchingStudents.map((s) => s._id);
-      filter.studentId = { $in: studentIds };
     }
 
     const totalPlacements = await Placement.countDocuments(filter);

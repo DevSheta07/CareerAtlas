@@ -261,7 +261,7 @@ export default function HigherStudiesPage() {
             <HiMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-apple-ink-48" />
             <input
               type="text"
-              placeholder="Search by university..."
+              placeholder="Search by student name or university..."
               value={filters.search}
               onChange={(e) => handleFilterChange('search', e.target.value)}
               className="input-field w-full pl-10"

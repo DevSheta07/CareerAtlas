@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import * as api from '../services/api';
-import { BRANCHES, BATCHES, STUDENT_STATUSES } from '../utils/constants';
-import { getStatusLabel } from '../utils/helpers';
+import { BRANCHES, BATCHES } from '../utils/constants';
+import { getStatusLabel, getStatusColor } from '../utils/helpers';
 import toast from 'react-hot-toast';
 import { HiUser, HiAcademicCap, HiBriefcase } from 'react-icons/hi2';
 
@@ -250,22 +250,14 @@ export default function ProfilePage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label htmlFor="status" className="block text-sm font-semibold text-apple-ink mb-1.5">
+              <label className="block text-sm font-semibold text-apple-ink mb-1.5">
                 Status
               </label>
-              <select
-                id="status"
-                name="status"
-                value={form.status}
-                onChange={handleChange}
-                className="select-field w-full"
-              >
-                {STUDENT_STATUSES.map((s) => (
-                  <option key={s} value={s}>
-                    {getStatusLabel(s)}
-                  </option>
-                ))}
-              </select>
+              <div className="flex items-center mt-2.5">
+                <span className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider ${getStatusColor(form.status)}`}>
+                  {getStatusLabel(form.status)}
+                </span>
+              </div>
             </div>
           </div>
         </div>

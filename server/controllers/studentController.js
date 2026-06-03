@@ -340,7 +340,6 @@ const updateStudentProfile = async (req, res) => {
     if (branch) student.branch = branch;
     if (batch) student.batch = batch;
     if (cgpa !== undefined) student.cgpa = cgpa;
-    if (status) student.status = status;
 
     await user.save();
     await student.save();
