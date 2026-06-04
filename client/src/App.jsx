@@ -28,8 +28,16 @@ const PAGE_TITLES = {
 
 function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [bannerDismissed, setBannerDismissed] = useState(
+    () => localStorage.getItem('browser-banner-dismissed') === 'true'
+  );
   const location = useLocation();
   const pageTitle = PAGE_TITLES[location.pathname] || 'Dashboard';
+
+  const handleDismissBanner = () => {
+    localStorage.setItem('browser-banner-dismissed', 'true');
+    setBannerDismissed(true);
+  };
 
   return (
     <div className="min-h-screen bg-apple-parchment">
@@ -46,6 +54,21 @@ function Layout({ children }) {
 
       {/* Main Content */}
       <div className="lg:ml-64 min-h-screen flex flex-col">
+        {!bannerDismissed && (
+          <div className="bg-[#fff8e6] border-b border-[#ffe5a3] text-[#7a5300] text-xs py-2 px-6 flex items-center justify-between transition-all duration-300 z-40 relative">
+            <div className="flex items-center gap-2 mx-auto">
+              <span>🌐</span>
+              <span className="font-medium text-center">For the best experience, we recommend using a desktop web browser.</span>
+            </div>
+            <button 
+              onClick={handleDismissBanner}
+              className="text-[#7a5300]/60 hover:text-[#7a5300] text-sm font-semibold focus:outline-none ml-2"
+              aria-label="Dismiss"
+            >
+              ✕
+            </button>
+          </div>
+        )}
         <Navbar
           onMenuClick={() => setSidebarOpen(true)}
           title={pageTitle}
