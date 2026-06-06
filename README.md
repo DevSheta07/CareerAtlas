@@ -199,6 +199,30 @@ Placement officers can:
 - Vercel
 - Render
 
+---
+
+## Try the Demo
+
+Visitors can explore the platform using the demo student account.
+
+### Student Account
+
+```text
+Email: testuser@gmail.com
+Password: test123@
+```
+
+This account provides access to:
+
+- Placement analytics dashboard
+- Company insights
+- Student records
+- Higher studies statistics
+- Career trends and reports
+
+> Demo credentials are provided for evaluation and showcase purposes.
+> Some administrative features may be restricted.
+
 
 ---
 
