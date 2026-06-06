@@ -308,13 +308,11 @@ CareerAtlas/
 
 Add application screenshots here.
 
-```md
-![Dashboard](screenshots/dashboard.png)
 
-![Analytics](screenshots/analytics.png)
+![Dashboard](https://raw.githubusercontent.com/DevSheta07/CareerAtlas/main/screenshots/dashboard.png)
 
-![Companies](screenshots/companies.png)
-```
+![Companies](https://raw.githubusercontent.com/DevSheta07/CareerAtlas/main/screenshots/companies.png)
+
 
 ---
 
